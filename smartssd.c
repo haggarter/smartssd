@@ -21,33 +21,37 @@ int smartssd_init (smartssd *dev, char *drive) {
     dev->sata_drive = NULL;
     dev->nvme_drive = NULL;
 
-    if (sk_disk_open(drive, &dev->sata_drive) == 0) {
+    char *full_path = strcat("/dev/", drive);
+    if (sk_disk_open(full_path, &dev->sata_drive) == 0) {
         dev->type = SMARTSSD_PROTO_ATA;
         return 0;
     }
 
-    struct nvme_dev *nvme = nvme_open(drive);
-    if (nvme) {
-        struct nvme_id_ctrl id;
-        if (nvme_identify_ctrl(nvme, &id) == 0) {
-            dev->nvme_drive = nvme;
-            dev->type = SMARTSSD_PROTO_NVME;
-            return 0;
-        } else {
-            nvme_close(nvme);
-        }
+    /*nvme_root_t root = nvme_scan(NULL);
+    if (!root) {
+        printf("Failed to scan NVMe tree.\n");
     }
+
+    nvme_ctrl_t ctrls = nvme_scan_ctrls(root);
+    if (!ctrl) {
+        printf("Controller not found for %s\n", device);
+    } else {
+        dev->type = SMARTSSD_PROTO_NVME;
+        dev->nvme_drive = ctrl;
+    }
+
+    nvme_free_tree(root);
 
     printf("Unknown or unsupported device protocol\n");
     return -1;
-}
+}*/
 
 int smartssd_deinit(smartssd *dev) {
     if (dev->type == SMARTSSD_PROTO_ATA) {
         sk_disk_free(dev->sata_drive);
         dev->sata_drive = NULL;
-    } else if (dev->type == SMARTSSD_PROTO_NVME) {
+    } /*else if (dev->type == SMARTSSD_PROTO_NVME) {
         nvme_close(dev->nvme_drive);
         dev->nvme_drive = NULL;
-    }
+    }*/
 }
