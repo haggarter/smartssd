@@ -21,8 +21,8 @@ int smartssd_init (smartssd *dev, char *drive) {
     dev->sata_drive = NULL;
     dev->nvme_drive = NULL;
 
-    if (sk_disk_open(path, &dev->sata_drive) == 0) {
-        ssd->protocol = SMARTSSD_PROTO_ATA;
+    if (sk_disk_open(drive, &dev->sata_drive) == 0) {
+        dev->type = SMARTSSD_PROTO_ATA;
         return 0;
     }
 
