@@ -10,8 +10,10 @@
 
 int smartssd_init (smartssd *dev, char *drive) {
     
+    char *full_path = strcat("/dev/", drive);
+
     struct stat st;
-    if (stat(drive, &st) != 0) {
+    if (stat(full_path, &st) != 0) {
         printf("Device not found.\n");
         return -1;
     }
@@ -21,7 +23,6 @@ int smartssd_init (smartssd *dev, char *drive) {
     dev->sata_drive = NULL;
     //dev->nvme_drive = NULL;
 
-    char *full_path = strcat("/dev/", drive);
     if (sk_disk_open(full_path, &dev->sata_drive) == 0) {
         dev->type = SMARTSSD_PROTO_ATA;
         return 0;
