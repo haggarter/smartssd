@@ -1,3 +1,11 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+
+#include <atasmart.h>
+#include <libnvme.h>
+
 #include "smartssd.h"
 
 int smartssd_init (smartssd *dev, char *drive) {
