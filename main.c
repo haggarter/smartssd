@@ -8,6 +8,7 @@ static const char *usage = "Usage: ./query_smart [string: drive name] [int: numb
 
 int main(int argc, char *argv[]) {
 
+    printf("Checking args...\n");
     if (argc != 3) {
         printf("Too few arguments.\n%s", usage);
         exit(1);
@@ -21,9 +22,11 @@ int main(int argc, char *argv[]) {
         printf("Cycles must be an integer greater than 0.\n%s", usage);
         exit(1);
     }
+    printf("Args ok.");
     
     smartssd *dev = (smartssd *)malloc(sizeof(smartssd));
 
+    printf("Initializing smartssd object...\n");
     if (smartssd_init(dev, drive) == 0) {
         printf("Device protocol: %s\n",
             dev->type == SMARTSSD_PROTO_ATA ? "ATA" :
@@ -32,6 +35,7 @@ int main(int argc, char *argv[]) {
         printf("Failed to initialize SSD.\n");
         exit(1);
     }
+    printf("Initialized smartssd.\n");
 
     smartssd_deinit(dev);
 

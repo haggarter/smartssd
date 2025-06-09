@@ -10,7 +10,9 @@
 
 int smartssd_init (smartssd *dev, char *drive) {
     
+    printf("Making path...\n");
     char *full_path = strcat("/dev/", drive);
+    printf("Path: %s", full_path);
 
     printf("checking if device exists...\n");
     struct stat st;
