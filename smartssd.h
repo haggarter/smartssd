@@ -8,7 +8,7 @@ typedef enum {
 } protocol;
 
 typedef struct smartssd {
-    struct nvme_ctrl_t nvme_drive;
+    //struct nvme_ctrl_t nvme_drive;
     SkDisk *sata_drive;
     char *path;
     protocol type;

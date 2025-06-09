@@ -40,11 +40,11 @@ int smartssd_init (smartssd *dev, char *drive) {
         dev->nvme_drive = ctrl;
     }
 
-    nvme_free_tree(root);
+    nvme_free_tree(root);*/
 
     printf("Unknown or unsupported device protocol\n");
     return -1;
-}*/
+}
 
 int smartssd_deinit(smartssd *dev) {
     if (dev->type == SMARTSSD_PROTO_ATA) {

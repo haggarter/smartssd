@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
             dev->type == SMARTSSD_PROTO_ATA ? "ATA" :
             dev->type == SMARTSSD_PROTO_NVME ? "NVMe" : "Unknown");
     } else {
-        printf("Failed to initialize SSD.\n", drive);
+        printf("Failed to initialize SSD.\n");
         exit(1);
     }
 
