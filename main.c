@@ -22,9 +22,9 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     
-    smartssd dev;
+    smartssd *dev = (smartssd *)malloc(sizeof(smartssd));
 
-    if (smartssd_init(&dev, path) == 0) {
+    if (smartssd_init(dev, path) == 0) {
         printf("Device protocol: %s\n",
             myssd.protocol == SMARTSSD_PROTO_ATA ? "ATA" :
             myssd.protocol == SMARTSSD_PROTO_NVME ? "NVMe" : "Unknown");
@@ -34,6 +34,8 @@ int main(int argc, char *argv[]) {
     }
 
     smartssd_deinit(dev);
+
+    free(dev);
 
     return 0;
 }
