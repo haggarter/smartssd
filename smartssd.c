@@ -38,8 +38,6 @@ int smartssd_init (smartssd *dev, char *drive) {
         }
     }
 
-    nvme_free_tree(r);
-
     printf("Unknown or unsupported device protocol\n");
     return -1;
 }
