@@ -22,6 +22,9 @@ int main(int argc, char *argv[]) {
 
     char *drive = argv[1];
 
+    if (debug)
+        printf("Drive: %s\n", drive);
+
     int cycles;
 
     if ((cycles = atoi(argv[2])) < 1) {
