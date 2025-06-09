@@ -1,8 +1,8 @@
 #include "smartssd.h"
 
-int main(int argv, char *argc[]) {
+int main(int argc, char *argv[]) {
     
-    if (argv != 3) {
+    if (argc != 3) {
         printf("Too few arguments.\nUsage: ./query_smart [string: drive name] [int: number of cycles]\n");
         exit(1);
     }
