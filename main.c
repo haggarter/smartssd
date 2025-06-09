@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <cjson/cJSON.h>
+
 static const char *usage = "Usage: ./query_smart [string: drive name] [int: number of cycles]\n";
 
 int main(int argc, char *argv[]) {
