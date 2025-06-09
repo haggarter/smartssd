@@ -13,7 +13,7 @@ int smartssd_init (smartssd *dev, char *drive, int debug) {
     if (debug)
         printf("Making path...\n");
     
-    char *full_path;
+    char full_path[16];
     sprintf(full_path, "/dev/%s", drive);
 
     if (debug)
