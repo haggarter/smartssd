@@ -19,7 +19,7 @@ int smartssd_init (smartssd *dev, char *drive) {
     dev->path = drive;
     dev->type = SMARTSSD_PROTO_UNKNOWN;
     dev->sata_drive = NULL;
-    dev->nvme_drive = NULL;
+    //dev->nvme_drive = NULL;
 
     char *full_path = strcat("/dev/", drive);
     if (sk_disk_open(full_path, &dev->sata_drive) == 0) {
