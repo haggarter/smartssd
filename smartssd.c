@@ -12,11 +12,13 @@ int smartssd_init (smartssd *dev, char *drive) {
     
     char *full_path = strcat("/dev/", drive);
 
+    printf("checking if device exists...\n");
     struct stat st;
     if (stat(full_path, &st) != 0) {
         printf("Device not found.\n");
         return -1;
     }
+    printf("Device found.\n");
 
     dev->path = drive;
     dev->type = SMARTSSD_PROTO_UNKNOWN;
