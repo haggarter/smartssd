@@ -26,27 +26,15 @@ int smartssd_init (smartssd *dev, char *drive) {
         return 0;
     }
 
-    nvme_root_t root = nvme_scan(NULL);
-    if (!r) {
-        printf("Failed to scan NVMe devices.\n");
-        return -1;
-    }
-
-    for (nvme_ctrl_t controller = nvme_root_ctrls(root); controller; controller = nvme_ctrl_next(controller)) {
-        for (nvme_ns_t ns = nvme_ctrl_namespaces(controller); ns; ns = nvme_ns_next(ns)) {
-            const char *device = nvme_ns_get_name(ns);
-            if (device && strcmp(device, drive + 5) == 0) {
-                dev->nvme_drive = nvme_open(drive);
-                if (dev->nvme_drive) {
-                    dev->type = SMARTSSD_PROTO_NVME;
-                    nvme_free_tree(root);
-                    return 0;
-                } else {
-                    nvme_free_tree(root);
-                    return -1;
-                }
-                return 0;
-            }
+    struct nvme_dev *nvme = nvme_open(drive);
+    if (nvme) {
+        struct nvme_id_ctrl id;
+        if (nvme_identify_ctrl(nvme, &id) == 0) {
+            dev->nvme_drive = nvme;
+            dev->type = SMARTSSD_PROTO_NVME;
+            return 0;
+        } else {
+            nvme_close(nvme);
         }
     }
 
