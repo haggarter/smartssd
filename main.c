@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "smartssd.h"
 
 static const char *usage = "Usage: ./query_smart [string: drive name] [int: number of cycles]\n";
