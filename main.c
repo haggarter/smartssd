@@ -24,10 +24,10 @@ int main(int argc, char *argv[]) {
 
     if (smartssd_init(dev, path) == 0) {
         printf("Device protocol: %s\n",
-            myssd.protocol == SMARTSSD_PROTO_ATA ? "ATA" :
-            myssd.protocol == SMARTSSD_PROTO_NVME ? "NVMe" : "Unknown");
+            dev->protocol == SMARTSSD_PROTO_ATA ? "ATA" :
+            dev->protocol == SMARTSSD_PROTO_NVME ? "NVMe" : "Unknown");
     } else {
-        printf("Failed to initialize SSD at path: %s\n", drive);
+        printf("Failed to initialize SSD at path: %s\n", path);
         exit(1);
     }
 
