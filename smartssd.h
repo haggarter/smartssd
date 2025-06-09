@@ -5,13 +5,15 @@
 #include <atasmart.h>
 #include <libnvme.h>
 
-#define NVME 0
-#define SATA 1
-#define UNKNOWN -1
+typedef enum {
+    SMARTSSD_PROTO_UNKNOWN,
+    SMARTSSD_PROTO_ATA,
+    SMARTSSD_PROTO_NVME
+} protocol;
 
 typedef struct smartssd {
-    char type;
-    const char *path;
+    protocol type;
+    char *path;
     struct nvme_dev *nvme_drive;
     SkDisk *sata_drive;
 } smartssd;
