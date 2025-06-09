@@ -28,8 +28,8 @@ int main(int argc, char *argv[]) {
 
     if (smartssd_init(dev, path) == 0) {
         printf("Device protocol: %s\n",
-            dev->protocol == SMARTSSD_PROTO_ATA ? "ATA" :
-            dev->protocol == SMARTSSD_PROTO_NVME ? "NVMe" : "Unknown");
+            dev->type == SMARTSSD_PROTO_ATA ? "ATA" :
+            dev->type == SMARTSSD_PROTO_NVME ? "NVMe" : "Unknown");
     } else {
         printf("Failed to initialize SSD at path: %s\n", path);
         exit(1);
