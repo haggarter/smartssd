@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 
 #include <atasmart.h>
-#include <nvme/nvme.h>
+#include <libnvme/nvme.h>
 
 #define NVME 0
 #define SATA 1
