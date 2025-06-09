@@ -23,10 +23,12 @@ int smartssd_init (smartssd *dev, char *drive) {
     dev->sata_drive = NULL;
     //dev->nvme_drive = NULL;
 
+    printf("Opening SATA disk...\n");
     if (sk_disk_open(full_path, &dev->sata_drive) == 0) {
         dev->type = SMARTSSD_PROTO_ATA;
         return 0;
     }
+    printf("SATA disk not found.\n");
 
     /*nvme_root_t root = nvme_scan(NULL);
     if (!root) {
