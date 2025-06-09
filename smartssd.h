@@ -16,11 +16,7 @@ typedef struct smartssd {
     SkDisk *sata_drive;
 } smartssd;
 
-int smartssd_init() {
+int smartssd_init(smartssd *dev);
 
-}
-
-int smartssd_deinit() {
-
-}
+int smartssd_deinit(smartssd *dev);
 
