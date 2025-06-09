@@ -14,7 +14,7 @@ typedef struct smartssd {
     protocol type;
 } smartssd;
 
-int smartssd_init(smartssd *dev, char *drive);
+int smartssd_init(smartssd *dev, char *drive, int debug);
 
 int smartssd_deinit(smartssd *dev);
 

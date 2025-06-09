@@ -8,32 +8,44 @@
 
 #include "smartssd.h"
 
-int smartssd_init (smartssd *dev, char *drive) {
+int smartssd_init (smartssd *dev, char *drive, int debug) {
     
-    printf("Making path...\n");
+    if (debug)
+        printf("Making path...\n");
+    
     char *full_path;
     sprintf(full_path, "/dev/%s", drive);
-    printf("Path: %s", full_path);
 
-    printf("checking if device exists...\n");
+    if (debug)
+        printf("Path: %s\n", full_path);
+
+    if (debug)
+        printf("Checking if device exists...\n");
+    
     struct stat st;
     if (stat(full_path, &st) != 0) {
         printf("Device not found.\n");
         return -1;
     }
-    printf("Device found.\n");
+
+    if (debug)
+        printf("Device found.\n");
 
     dev->path = drive;
     dev->type = SMARTSSD_PROTO_UNKNOWN;
     dev->sata_drive = NULL;
     //dev->nvme_drive = NULL;
 
-    printf("Opening SATA disk...\n");
+    if (debug)
+        printf("Opening SATA disk...\n");
+
     if (sk_disk_open(full_path, &dev->sata_drive) == 0) {
         dev->type = SMARTSSD_PROTO_ATA;
         return 0;
     }
-    printf("SATA disk not found.\n");
+
+    if (debug)
+        printf("SATA disk not found.\n");
 
     /*nvme_root_t root = nvme_scan(NULL);
     if (!root) {
