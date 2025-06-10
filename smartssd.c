@@ -9,7 +9,7 @@
 #define NUM_READS_PER_CYCLE 14
 #define KB 1024
 #define MB (KB * KB)
-#define GB (MG * KB)
+#define GB (MB * KB)
 #define PAGE_SIZE (4 * KB)
 
 static const char *usage = "Usage: ./query_smart [string: path to drive] [int: number of cycles]\n";
