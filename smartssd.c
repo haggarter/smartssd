@@ -1,9 +1,16 @@
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-
+#include <fcntl.h>
 #include <cjson/cJSON.h>
+
+#define NUM_READS_PER_CYCLE 14
+#define KB 1024
+#define MB (KB * KB)
+#define GB (MG * KB)
+#define PAGE_SIZE (4 * KB)
 
 static const char *usage = "Usage: ./query_smart [string: path to drive] [int: number of cycles]\n";
 
@@ -51,7 +58,17 @@ int main(int argc, char *argv[]) {
     if (debug)
         printf("Args ok.\n");
     
+    if (debug)
+        printf("Creating 1GB buffer...\n");
     
+    void *buf;
+    if (posix_memalign(&buf, BLOCK_SIZE, ONE_GB) != 0) {
+        printf("Failed to allocate aligned buffer.\n");
+        exit(1);
+    }
+
+    if (debug)
+        printf("Read buffer allocated.\n");
 
     return 0;
 }
