@@ -62,13 +62,15 @@ int main(int argc, char *argv[]) {
         printf("Creating 1GB buffer...\n");
     
     void *buf;
-    if (posix_memalign(&buf, BLOCK_SIZE, ONE_GB) != 0) {
+    if (posix_memalign(&buf, PAGE_SIZE, GB) != 0) {
         printf("Failed to allocate aligned buffer.\n");
         exit(1);
     }
 
     if (debug)
         printf("Read buffer allocated.\n");
+
+    free(buf);
 
     return 0;
 }
