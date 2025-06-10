@@ -78,12 +78,36 @@ int main(int argc, char *argv[]) {
     int fd;
     if ((fd = open(drive, O_RDONLY | O_DIRECT)) < 0) {
         printf("Uable to access drive.\n");
+        free(buf);
         exit(1);
     }
 
     if (debug)
         printf("Drive ready (fd: %d).\n", fd);
 
+    printf("DRIVE READY, BEGINNING READ CYCLES\n");
+
+    for (int i = 0; i < cycles; i++) {
+        printf("Starting Cycle %d...\n", i + 1);
+        for (int j = 0; j < NUM_READS_PER_CYCLE; j++) {
+            ssize_t total_read = 0;
+            while (total_read < GB) {
+                ssize_t num_read = pread(fd, (char *)buf + total_read, PAGE_SIZE, total_read);
+                if (num_read < 0) {
+                    printf("Read error, aborting.\n");
+                    close(fd);
+                    free(buf);
+                    exit(1);
+                }
+                total_read += num_read;
+            }
+        }
+        printf("Cycle %d Complete\n", i + 1);
+    }
+
+    printf("FINISHED READ CYCLES, PERFORMING CHECKSUMS\n");
+
+    close(fd);
     free(buf);
 
     return 0;
