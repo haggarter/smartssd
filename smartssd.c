@@ -5,7 +5,7 @@
 
 #include <cjson/cJSON.h>
 
-static const char *usage = "Usage: ./query_smart [string: drive name] [int: number of cycles]\n";
+static const char *usage = "Usage: ./query_smart [string: path to drive] [int: number of cycles]\n";
 
 int main(int argc, char *argv[]) {
     int debug = 0;
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
         printf("Checking if drive exists...");
 
     struct stat st;
-    if (stat(path, &buffer) < 0) {
+    if (stat(drive, &st) < 0) {
         printf("Drive not found.\n");
         exit(1);
     }
