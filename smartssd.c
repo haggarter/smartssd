@@ -92,9 +92,9 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < NUM_READS_PER_CYCLE; j++) {
             printf("Read %d\n", j);
             ssize_t total_read = 0;
-            while (total_read < GB) {
+            while (total_read < MB) {
                 ssize_t num_read = pread(fd, (char *)buf + total_read, PAGE_SIZE, total_read);
-                printf("%ld\n", total_read - GB);
+                printf("%ld\n", total_read - MB);
                 if (num_read < 0) {
                     printf("Read error, aborting.\n");
                     close(fd);
