@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
     }
     time_t end = time(NULL);
 
-    printf("Total time: %f\n", end - start);
+    printf("Total time: %ld\n", end - start);
 
     printf("FINISHED READ CYCLES, PERFORMING CHECKSUMS\n");
 
