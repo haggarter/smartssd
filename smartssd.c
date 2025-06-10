@@ -29,6 +29,15 @@ int main(int argc, char *argv[]) {
     if (debug)
         printf("Checking if drive exists...");
 
+    struct stat st;
+    if (stat(path, &buffer) < 0) {
+        printf("Drive not found.\n");
+        exit(1);
+    }
+
+    if (debug)
+        printf("Drive exists.\n")
+
     int cycles;
 
     if ((cycles = atoi(argv[2])) < 1) {
