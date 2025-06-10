@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (debug)
-        printf("Drive ready.\n");
+        printf("Drive ready (fd: %d).\n", fd);
 
     free(buf);
 
