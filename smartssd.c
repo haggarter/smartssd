@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
             ssize_t total_read = 0;
             while (total_read < GB) {
                 ssize_t num_read = pread(fd, (char *)buf + total_read, PAGE_SIZE, total_read);
-                printf("%ld\n", total_read - GB);
+                printf("%zu\n", total_read);
                 if (num_read < 0) {
                     printf("Read error, aborting.\n");
                     close(fd);
