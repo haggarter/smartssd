@@ -90,10 +90,12 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < cycles; i++) {
         printf("Starting Cycle %d...\n", i + 1);
         for (int j = 0; j < NUM_READS_PER_CYCLE; j++) {
-            printf("Read %d", j);
+            printf("Read %d\n", j);
             ssize_t total_read = 0;
             while (total_read < GB) {
+                printf("before\n");
                 ssize_t num_read = pread(fd, (char *)buf + total_read, PAGE_SIZE, total_read);
+                printf("after\n");
                 if (num_read < 0) {
                     printf("Read error, aborting.\n");
                     close(fd);
