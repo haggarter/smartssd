@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
         printf("Drive: %s\n", drive);
 
     if (debug)
-        printf("Checking if drive exists...");
+        printf("Checking if drive exists...\n");
 
     struct stat st;
     if (stat(drive, &st) < 0) {
