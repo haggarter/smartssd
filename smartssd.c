@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (debug)
-        printf("Drive exists.\n")
+        printf("Drive exists.\n");
 
     int cycles;
 
