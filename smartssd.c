@@ -90,6 +90,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < cycles; i++) {
         printf("Starting Cycle %d...\n", i + 1);
         for (int j = 0; j < NUM_READS_PER_CYCLE; j++) {
+            printf("Read %d", j);
             ssize_t total_read = 0;
             while (total_read < GB) {
                 ssize_t num_read = pread(fd, (char *)buf + total_read, PAGE_SIZE, total_read);
@@ -101,6 +102,7 @@ int main(int argc, char *argv[]) {
                 }
                 total_read += num_read;
             }
+            printf (" Complete\n");
         }
         printf("Cycle %d Complete\n", i + 1);
     }
