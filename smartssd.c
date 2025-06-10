@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
     struct stat st;
     if (stat(drive, &st) < 0) {
-        printf("Drive not found.\n");
+        printf("Drive not found.\n%s", usage);
         exit(1);
     }
 
