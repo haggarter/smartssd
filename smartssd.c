@@ -20,7 +20,7 @@ static const char *usage = "Usage: ./query_smart [string: path to drive] [int: n
 int main(int argc, char *argv[]) {
     int debug = 0;
 
-    if ((argc == 4) && (strcmp(argv[3], "--debug") == 0))
+    if ((argc > 3) && (strcmp(argv[3], "--debug") == 0))
         debug = 1;
 
     if (debug)
