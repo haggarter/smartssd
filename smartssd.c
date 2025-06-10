@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <cjson/cJSON.h>
+#include <time.h>
 
 #define NUM_READS_PER_CYCLE 14
 #define KB 1024
@@ -86,7 +87,7 @@ int main(int argc, char *argv[]) {
         printf("Drive ready (fd: %d).\n", fd);
 
     printf("DRIVE READY, BEGINNING READ CYCLES\n");
-
+    time_t start = time(NULL);
     for (int i = 0; i < cycles; i++) {
         printf("Starting Cycle %d...\n", i + 1);
         for (int j = 0; j < NUM_READS_PER_CYCLE; j++) {
@@ -106,6 +107,9 @@ int main(int argc, char *argv[]) {
         }
         printf("Cycle %d Complete\n", i + 1);
     }
+    time_t end = time(NULL);
+
+    printf("Total time: %f\n", end - start);
 
     printf("FINISHED READ CYCLES, PERFORMING CHECKSUMS\n");
 
