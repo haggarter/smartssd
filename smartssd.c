@@ -70,6 +70,17 @@ int main(int argc, char *argv[]) {
     if (debug)
         printf("Read buffer allocated.\n");
 
+    if (debug)
+        printf("Opening drive for I/O...\n");
+
+    int fd;
+    if ((fd = open(drive, O_RDONLY | O_DIRECT)) < 0) {
+        printf("Uable to access drive.\n");
+    }
+
+    if (debug)
+        printf("Drive ready.\n");
+
     free(buf);
 
     return 0;
