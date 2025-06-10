@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
     int fd;
     if ((fd = open(drive, O_RDONLY | O_DIRECT)) < 0) {
         printf("Uable to access drive.\n");
+        exit(1);
     }
 
     if (debug)
