@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
         printf("Creating 1GB buffer...\n");
     
     void *buf;
-    if (posix_memalign(&buf, 2 * MB, GB) != 0) {
+    if (posix_memalign(&buf, MB, GB) != 0) {
         printf("Failed to allocate aligned buffer.\n");
         exit(1);
     }
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
             printf("Read %d\n", j + 1);
             ssize_t total_read = 0;
             while (total_read < GB) {
-                ssize_t num_read = pread(fd, (char *)buf + total_read, 2 * MB, total_read);
+                ssize_t num_read = pread(fd, (char *)buf + total_read, MB, total_read);
                 if (num_read < 0) {
                     printf("Read error, aborting.\n");
                     close(fd);
