@@ -13,7 +13,6 @@
 #define KB 1024
 #define MB (KB * KB)
 #define GB (MB * KB)
-#define PAGE_SIZE (4 * KB)
 
 static const char *usage = "Usage: ./query_smart [string: path to drive] [int: number of cycles]\n";
 
@@ -65,7 +64,7 @@ int main(int argc, char *argv[]) {
         printf("Creating 1GB buffer...\n");
     
     void *buf;
-    if (posix_memalign(&buf, PAGE_SIZE, GB) != 0) {
+    if (posix_memalign(&buf, MB, GB) != 0) {
         printf("Failed to allocate aligned buffer.\n");
         exit(1);
     }
@@ -94,7 +93,7 @@ int main(int argc, char *argv[]) {
             printf("Read %d\n", j);
             ssize_t total_read = 0;
             while (total_read < GB) {
-                ssize_t num_read = pread(fd, (char *)buf + total_read, PAGE_SIZE, total_read);
+                ssize_t num_read = pread(fd, (char *)buf + total_read, MB, total_read);
                 if (num_read < 0) {
                     printf("Read error, aborting.\n");
                     close(fd);
