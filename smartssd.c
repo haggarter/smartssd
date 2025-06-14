@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (debug)
-        printf("Checksums file opened successfully.\n");
+        printf("Checksums file opened successfully: fd %d\n", checksum_fd);
 
     /*
     Make sure SMART output is opened
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (debug)
-        printf("SMART file opened successfully.\n");
+        printf("SMART file opened successfully: fd %d\n", smart_fd);
 
     if (debug)
         printf("Args ok.\n");
