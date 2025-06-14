@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 
     int fd;
     if ((fd = open(drive, O_RDONLY | O_DIRECT)) < 0) {
-        printf("Uable to access drive.\n");
+        printf("Unable to access drive.\n");
         free(buf);
         exit(1);
     }
@@ -88,7 +88,8 @@ int main(int argc, char *argv[]) {
     printf("DRIVE READY, BEGINNING READ CYCLES\n");
     time_t start = time(NULL);
     for (int i = 0; i < cycles; i++) {
-        printf("Starting Cycle %d...\n", i + 1);
+        if (debug)
+            printf("Starting Cycle %d...\n", i + 1);
         for (int j = 0; j < NUM_READS_PER_CYCLE; j++) {
             printf("Read %d\n", j + 1);
             ssize_t total_read = 0;
@@ -102,7 +103,8 @@ int main(int argc, char *argv[]) {
                 }
                 total_read += num_read;
             }
-            printf ("Complete\n");
+            if (debug)
+                printf ("Complete\n");
         }
         printf("Cycle %d Complete\n", i + 1);
     }
