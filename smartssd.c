@@ -200,6 +200,7 @@ int main(int argc, char *argv[]) {
     char *smart_cmd = strcat(smartctl, drive);
     smart_cmd = strcat(smart_cmd, redirect);
     smart_cmd = strcat(smart_cmd, argv[4]);
+    printf("%s", smart_cmd);
     system(smart_cmd);
 
     /*
