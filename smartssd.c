@@ -214,6 +214,8 @@ int main(int argc, char *argv[]) {
     printf("SUCCESS, GRACEFULLY EXITING\n");
 
     close(drive_fd);
+    close(checksum_fd);
+    close(smart_fd);
     free(buf);
 
     return 0;
