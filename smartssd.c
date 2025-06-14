@@ -210,7 +210,6 @@ int main(int argc, char *argv[]) {
 
     close(drive_fd);
     close(checksum_fd);
-    close(smart_fd);
     free(buf);
 
     return 0;
