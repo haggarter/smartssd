@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
         SHA1_Final(hash, &ctx);
         printf("Block %d: ", i);
         for (int j = 0; j < SHA_DIGEST_LENGTH; j++) {
-            printf("%02x", hash[i]);
+            printf("%02x", hash[j]);
         }
         printf("\n");
     }
@@ -167,9 +167,9 @@ int main(int argc, char *argv[]) {
     elapsed_minutes = (float)(end - start) / 60.0;
     printf("Total time: %.2f minutes\n", elapsed_minutes);
 
-    printf("FINISHED CHECKSUMS, QUERYING SMART ATTRIBUTES");
+    printf("FINISHED CHECKSUMS, QUERYING SMART ATTRIBUTES\n");
 
-    printf("SUCCESS, GRACEFULLY EXITING");
+    printf("SUCCESS, GRACEFULLY EXITING\n");
 
     close(drive_fd);
     free(buf);
