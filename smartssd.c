@@ -6,7 +6,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <cjson/cJSON.h>
 #include <time.h>
 #include <openssl/sha.h>
 
@@ -16,6 +15,10 @@
 #define GB (MB * KB)
 
 static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles] [string: name of checksum output file] [string: name of SMART output file]\n";
+
+static const char *smartctl = "sudo smartctl -a --json ";
+
+static const char *redirect = " > "
 
 int main(int argc, char *argv[]) {
     /*
@@ -91,23 +94,6 @@ int main(int argc, char *argv[]) {
 
     if (debug)
         printf("Checksums file opened successfully: fd %d\n", checksum_fd);
-
-    /*
-    Make sure SMART output is opened
-    for writing.
-    */
-    if (debug)
-        printf("Opening SMART file...\n");
-
-    char *smart_out = argv[4];
-    int smart_fd;
-    if ((smart_fd = open(smart_out, O_WRONLY | O_CREAT, 0644)) < 0) {
-        printf("SMART output file could not be opened.\n");
-        exit(1);
-    }
-
-    if (debug)
-        printf("SMART file opened successfully: fd %d\n", smart_fd);
 
     if (debug)
         printf("Args ok.\n");
@@ -211,6 +197,15 @@ int main(int argc, char *argv[]) {
 
     printf("FINISHED CHECKSUMS, QUERYING SMART ATTRIBUTES\n");
 
+    char *smart_cmd = strcat(smartctl, drive);
+    smart_cmd = strcat(smart_cmd, redirect);
+    smart_cmd = strcat(smart_cmd, argv[4]);
+    system(smart_cmd);
+
+    /*
+    Make sure to free the buffer and close
+    all the open file descriptors.
+    */
     printf("SUCCESS, GRACEFULLY EXITING\n");
 
     close(drive_fd);
