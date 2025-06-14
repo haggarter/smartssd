@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 
     char *checksum_out = argv[3];
     int checksum_fd;
-    if (checksum_fd = open(checksum_out, O_WRONLY | O_CREAT, 0644) < 0) {
+    if ((checksum_fd = open(checksum_out, O_WRONLY | O_CREAT, 0644)) < 0) {
         printf("Checksum output file could not be opened.\n");
         exit(1);
     }
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 
     char *smart_out = argv[4];
     int smart_fd;
-    if (smart_fd = open(smart_out, O_WRONLY | O_CREAT, 0644) < 0) {
+    if ((smart_fd = open(smart_out, O_WRONLY | O_CREAT, 0644)) < 0) {
         printf("SMART output file could not be opened.\n");
         exit(1);
     }
