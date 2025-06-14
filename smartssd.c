@@ -110,7 +110,8 @@ int main(int argc, char *argv[]) {
     }
     time_t end = time(NULL);
 
-    printf("Total time: %ld\n", end - start);
+    double elapsed_minutes = (float)(end - start) / 60.0;
+    printf("Total time: %.2f minutes\n", elapsed_minutes);
 
     printf("FINISHED READ CYCLES, PERFORMING CHECKSUMS\n");
 
