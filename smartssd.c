@@ -16,10 +16,6 @@
 
 static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles] [string: name of checksum output file] [string: name of SMART output file]\n";
 
-static const char *smartctl = "sudo smartctl -a --json ";
-
-static const char *redirect = " > ";
-
 int main(int argc, char *argv[]) {
     /*
     Check for debug flag (functionally verbose)
@@ -197,10 +193,9 @@ int main(int argc, char *argv[]) {
 
     printf("FINISHED CHECKSUMS, QUERYING SMART ATTRIBUTES\n");
 
-    char *smart_cmd = strcat(smartctl, drive);
-    smart_cmd = strcat(smart_cmd, redirect);
-    smart_cmd = strcat(smart_cmd, argv[4]);
-    printf("%s", smart_cmd);
+    char smart_cmd[512];
+    snprintf(smart_cmd, sizeof(smart_cmd), "sudo smartctl -a --json %s > %s", drive, argv[4]);
+    
     system(smart_cmd);
 
     /*
