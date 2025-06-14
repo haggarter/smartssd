@@ -18,7 +18,7 @@ static const char *usage = "Usage: ./smartssd [string: path to drive] [int: numb
 
 static const char *smartctl = "sudo smartctl -a --json ";
 
-static const char *redirect = " > "
+static const char *redirect = " > ";
 
 int main(int argc, char *argv[]) {
     /*
