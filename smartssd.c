@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <cjson/cJSON.h>
 #include <time.h>
+#include <signal.h>
 
 #define NUM_READS_PER_CYCLE 14
 #define KB 1024
@@ -17,6 +18,8 @@
 static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles]\n";
 
 int main(int argc, char *argv[]) {
+    signal(SIGHUP, SIG_IGN);
+
     int debug = 0;
 
     if ((argc > 3) && (strcmp(argv[3], "--debug") == 0))
