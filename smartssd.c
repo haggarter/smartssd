@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
 
     char *validation_out = argv[4];
     int validation_out_fd;
-    if ((validation_out_fd = open(validation_out, O_WRONLY | O_CREAT, 0644)) < 0) {
+    if ((validation_out_fd = open(validation_out, O_WRONLY | O_CREAT | O_TRUNC, 0644)) < 0) {
         printf("Data validation output file could not be opened.\n");
         exit(1);
     }
@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 
     char *smart_out = argv[5];
     int smart_out_fd;
-    if ((smart_out_fd = open(validation_out, O_WRONLY | O_CREAT, 0644)) < 0) {
+    if ((smart_out_fd = open(smart_out, O_WRONLY | O_CREAT | O_TRUNC, 0644)) < 0) {
         printf("Smart output file could not be opened.\n");
         exit(1);
     }
@@ -213,6 +213,7 @@ int main(int argc, char *argv[]) {
 
     system(cmp_cmd);
 
+    close(temp_fd);
     system("rm tmp_data");
     end = time(NULL);
 
