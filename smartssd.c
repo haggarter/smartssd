@@ -7,14 +7,13 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
-#include <openssl/sha.h>
 
 #define NUM_READS_PER_CYCLE 14
 #define KB 1024
 #define MB (KB * KB)
 #define GB (MB * KB)
 
-static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles] [string: name of checksum output file] [string: name of SMART output file]\n";
+static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles] [string: name of data check output file] [string: name of SMART output file]\n";
 
 int main(int argc, char *argv[]) {
     /*
@@ -75,21 +74,21 @@ int main(int argc, char *argv[]) {
         printf("Cycles: %d\n", cycles);
 
     /*
-    Make sure checksums output is opened
+    Make sure data check output is opened
     for writing.
     */
     if (debug)
-        printf("Opening checksums file...\n");
+        printf("Opening data check file...\n");
 
     char *checksum_out = argv[3];
-    int checksum_fd;
-    if ((checksum_fd = open(checksum_out, O_WRONLY | O_CREAT, 0644)) < 0) {
-        printf("Checksum output file could not be opened.\n");
+    int validation_fd;
+    if ((validation_fd = open(checksum_out, O_WRONLY | O_CREAT, 0644)) < 0) {
+        printf("Data check output file could not be opened.\n");
         exit(1);
     }
 
     if (debug)
-        printf("Checksums file opened successfully: fd %d\n", checksum_fd);
+        printf("Data check file opened successfully: fd %d\n", validation_fd);
 
     if (debug)
         printf("Args ok.\n");
@@ -164,34 +163,15 @@ int main(int argc, char *argv[]) {
     double elapsed_minutes = (float)(end - start) / 60.0;
     printf("Total time: %.2f minutes\n", elapsed_minutes);
 
-    printf("FINISHED READ CYCLES, PERFORMING CHECKSUMS\n");
+    printf("FINISHED READ CYCLES, COMPARING DATA\n");
 
-    if (debug)
-        printf("Performing checksums...\n");
+    int w_total = 0;
 
-    unsigned char hashes[KB][SHA_DIGEST_LENGTH];
-    for (int i = 0; i < KB; i++) {
-        void *chunk = (char *)buf + i * MB;
-        SHA_CTX ctx;
-        SHA1_Init(&ctx);
-        SHA1_Update(&ctx, chunk, MB);
-        SHA1_Final(hashes[i], &ctx);
+    while (w_total < GB) {
+        w_total = write(validation_fd, buf + w_total, MB);
     }
 
-    if (debug)
-        printf("Checksums performed.\n");
-
-    if (debug)
-        printf("Saving checksums...\n");
-
-    for (int i = 0; i < KB; i++) {
-        write(checksum_fd, hashes[i], SHA_DIGEST_LENGTH);
-    }
-
-    if (debug)
-        printf("Checksums saved.\n");
-
-    printf("FINISHED CHECKSUMS, QUERYING SMART ATTRIBUTES\n");
+    printf("FINISHED DATA COMPARISONS, QUERYING SMART ATTRIBUTES\n");
 
     char smart_cmd[512];
     snprintf(smart_cmd, sizeof(smart_cmd), "sudo smartctl -a --json %s > %s", drive, argv[4]);
@@ -205,7 +185,7 @@ int main(int argc, char *argv[]) {
     printf("SUCCESS, GRACEFULLY EXITING\n");
 
     close(drive_fd);
-    close(checksum_fd);
+    close(validation_fd);
     free(buf);
 
     return 0;
