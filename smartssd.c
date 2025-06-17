@@ -221,13 +221,6 @@ int main(int argc, char *argv[]) {
     
     system(smart_cmd);
 
-    printf("DATA VALIDATED, QUERYING SMART ATTRIBUTES\n");
-
-    char smart_cmd[512];
-    snprintf(smart_cmd, sizeof(smart_cmd), "sudo smartctl -a --json %s > %s", drive, argv[5]);
-    
-    system(smart_cmd);
-
     /*
     Make sure to free the buffer and close
     all the open file descriptors.
