@@ -168,7 +168,7 @@ int main(int argc, char *argv[]) {
     int w_total = 0;
 
     while (w_total < GB) {
-        w_total = write(validation_fd, buf + w_total, MB);
+        w_total += write(validation_fd, buf + w_total, MB);
     }
 
     printf("FINISHED DATA COMPARISONS, QUERYING SMART ATTRIBUTES\n");
