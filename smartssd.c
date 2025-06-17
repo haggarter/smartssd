@@ -107,6 +107,23 @@ int main(int argc, char *argv[]) {
     if (debug)
         printf("Data validation output file opened successfully: fd %d\n", validation_out_fd);
 
+    /*
+    Make sure smart output is opened
+    for writing.
+    */
+    if (debug)
+        printf("Opening smart output file...\n");
+
+    char *smart_out = argv[5];
+    int smart_out_fd;
+    if ((smart_out_fd = open(validation_out, O_WRONLY | O_CREAT, 0644)) < 0) {
+        printf("Smart output file could not be opened.\n");
+        exit(1);
+    }
+
+    if (debug)
+        printf("Smart output file opened successfully: fd %d\n", smart_out_fd);
+
     if (debug)
         printf("Args ok.\n");
     
@@ -180,15 +197,31 @@ int main(int argc, char *argv[]) {
     double elapsed_minutes = (float)(end - start) / 60.0;
     printf("Total time: %.2f minutes\n", elapsed_minutes);
 
-    printf("FINISHED READ CYCLES, COMPARING DATA\n");
+    printf("FINISHED READ CYCLES, VALIDATING DATA\n");
+
+    char *temp = "tmp_data";
+    int temp_fd = open(temp, O_WRONLY | O_CREAT, 0644);
 
     int w_total = 0;
-
     while (w_total < GB) {
-        w_total += write(validation_out_fd, buf + w_total, MB);
+        w_total += write(temp_fd, buf + w_total, MB);
     }
 
-    printf("FINISHED DATA COMPARISONS, QUERYING SMART ATTRIBUTES\n");
+    char cmp_cmd[512];
+    snprintf(cmp_cmd, sizeof(cmp_cmd), "cmp -l %s %s | wc -l", validation_in, temp);
+
+    system(cmp_cmd);
+
+    system("rm tmp_data");
+
+    printf("DATA VALIDATED, QUERYING SMART ATTRIBUTES\n");
+
+    char smart_cmd[512];
+    snprintf(smart_cmd, sizeof(smart_cmd), "sudo smartctl -a --json %s > %s", drive, smart_out);
+    
+    system(smart_cmd);
+
+    printf("DATA VALIDATED, QUERYING SMART ATTRIBUTES\n");
 
     char smart_cmd[512];
     snprintf(smart_cmd, sizeof(smart_cmd), "sudo smartctl -a --json %s > %s", drive, argv[5]);
@@ -202,8 +235,9 @@ int main(int argc, char *argv[]) {
     printf("SUCCESS, GRACEFULLY EXITING\n");
 
     close(drive_fd);
-    close(validation_out_fd);
     close(validation_in_fd);
+    close(validation_out_fd);
+    close(smart_out_fd);
     free(buf);
 
     return 0;
