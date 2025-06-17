@@ -199,6 +199,7 @@ int main(int argc, char *argv[]) {
 
     printf("FINISHED READ CYCLES, VALIDATING DATA\n");
 
+    start = time(NULL);
     char *temp = "tmp_data";
     int temp_fd = open(temp, O_WRONLY | O_CREAT, 0644);
 
@@ -213,13 +214,22 @@ int main(int argc, char *argv[]) {
     system(cmp_cmd);
 
     system("rm tmp_data");
+    end = time(NULL);
+
+    elapsed_minutes = (float)(end - start) / 60.0;
+    printf("Total time: %.2f minutes\n", elapsed_minutes);
 
     printf("DATA VALIDATED, QUERYING SMART ATTRIBUTES\n");
 
+    start = time(NULL);
     char smart_cmd[512];
     snprintf(smart_cmd, sizeof(smart_cmd), "sudo smartctl -a --json %s > %s", drive, smart_out);
     
     system(smart_cmd);
+    end = time(NULL);
+
+    elapsed_minutes = (float)(end - start) / 60.0;
+    printf("Total time: %.2f minutes\n", elapsed_minutes);
 
     /*
     Make sure to free the buffer and close
