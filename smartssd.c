@@ -208,7 +208,7 @@ int main(int argc, char *argv[]) {
     }
 
     char cmp_cmd[512];
-    snprintf(cmp_cmd, sizeof(cmp_cmd), "cmp -l %s %s | wc -l", validation_in, temp);
+    snprintf(cmp_cmd, sizeof(cmp_cmd), "cmp -l %s %s | wc -l > %s", validation_in, temp, validation_out);
 
     system(cmp_cmd);
 
