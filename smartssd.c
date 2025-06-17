@@ -13,7 +13,7 @@
 #define MB (KB * KB)
 #define GB (MB * KB)
 
-static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles] [string: name of data check output file] [string: name of SMART output file]\n";
+static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles] [string: name of data validation input file] [string: name of data validation output file] [string: name of SMART output file]\n";
 
 int main(int argc, char *argv[]) {
     /*
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     */
     int debug = 0;
 
-    if ((argc > 5) && (strcmp(argv[5], "--debug") == 0))
+    if ((argc > 6) && (strcmp(argv[6], "--debug") == 0))
         debug = 1;
 
     /*
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     if (debug)
         printf("Checking args...\n");
 
-    if (argc < 5) {
+    if (argc < 6) {
         printf("Too few arguments.\n%s", usage);
         exit(1);
     }
@@ -74,21 +74,38 @@ int main(int argc, char *argv[]) {
         printf("Cycles: %d\n", cycles);
 
     /*
-    Make sure data check output is opened
+    Make sure data validation output is opened
     for writing.
     */
     if (debug)
-        printf("Opening data check file...\n");
+        printf("Opening validation input file...\n");
 
-    char *checksum_out = argv[3];
-    int validation_fd;
-    if ((validation_fd = open(checksum_out, O_WRONLY | O_CREAT, 0644)) < 0) {
-        printf("Data check output file could not be opened.\n");
+    char *validation_in = argv[3];
+    int validation_in_fd;
+    if ((validation_in_fd = open(validation_in, O_RDONLY)) < 0) {
+        printf("Validation input file could not be opened.\n");
         exit(1);
     }
 
     if (debug)
-        printf("Data check file opened successfully: fd %d\n", validation_fd);
+        printf("Validation input opened successfully: fd %d\n", validation_in_fd);
+
+    /*
+    Make sure data validation output is opened
+    for writing.
+    */
+    if (debug)
+        printf("Opening data validation output file...\n");
+
+    char *validation_out = argv[4];
+    int validation_out_fd;
+    if ((validation_out_fd = open(validation_out, O_WRONLY | O_CREAT, 0644)) < 0) {
+        printf("Data validation output file could not be opened.\n");
+        exit(1);
+    }
+
+    if (debug)
+        printf("Data validation output file opened successfully: fd %d\n", validation_out_fd);
 
     if (debug)
         printf("Args ok.\n");
@@ -165,16 +182,20 @@ int main(int argc, char *argv[]) {
 
     printf("FINISHED READ CYCLES, COMPARING DATA\n");
 
-    int w_total = 0;
-
-    while (w_total < GB) {
-        w_total += write(validation_fd, buf + w_total, MB);
+    for (int i = 0; i < GB; i += MB - 1) {
+        char valid_MB[MB];
+        pread(validation_in_fd, valid_MB + i, MB, i);
+        for (int j = 0; j < MB; j++) {
+            if (((char *)buf)[i + j] != valid_MB[j]) {
+                printf("Bad byte\n");
+            }
+        }
     }
 
     printf("FINISHED DATA COMPARISONS, QUERYING SMART ATTRIBUTES\n");
 
     char smart_cmd[512];
-    snprintf(smart_cmd, sizeof(smart_cmd), "sudo smartctl -a --json %s > %s", drive, argv[4]);
+    snprintf(smart_cmd, sizeof(smart_cmd), "sudo smartctl -a --json %s > %s", drive, argv[5]);
     
     system(smart_cmd);
 
@@ -185,7 +206,8 @@ int main(int argc, char *argv[]) {
     printf("SUCCESS, GRACEFULLY EXITING\n");
 
     close(drive_fd);
-    close(validation_fd);
+    close(validation_out_fd);
+    close(validation_in_fd);
     free(buf);
 
     return 0;
