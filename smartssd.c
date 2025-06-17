@@ -182,14 +182,10 @@ int main(int argc, char *argv[]) {
 
     printf("FINISHED READ CYCLES, COMPARING DATA\n");
 
-    for (int i = 0; i < GB; i += MB - 1) {
-        char valid_MB[MB];
-        pread(validation_in_fd, valid_MB + i, MB, i);
-        for (int j = 0; j < MB; j++) {
-            if (((char *)buf)[i + j] != valid_MB[j]) {
-                printf("Bad byte\n");
-            }
-        }
+    int w_total = 0;
+
+    while (w_total < GB) {
+        w_total = write(validation_out_fd, buf + w_total, MB);
     }
 
     printf("FINISHED DATA COMPARISONS, QUERYING SMART ATTRIBUTES\n");
