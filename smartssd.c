@@ -12,7 +12,7 @@
 #define KB 1024
 #define MB (KB * KB)
 #define GB (MB * KB)
-#define MAX_IO_SIZE 2 * MB
+#define MAX_IO_SIZE MB
 
 static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles] [string: name of data validation input file] [string: name of data validation output file] [string: name of SMART output file]\n";
 
