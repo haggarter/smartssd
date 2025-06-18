@@ -12,6 +12,7 @@
 #define KB 1024
 #define MB (KB * KB)
 #define GB (MB * KB)
+#define MAX_IO_SIZE 16 * MB
 
 static const char *usage = "Usage: ./smartssd [string: path to drive] [int: number of cycles] [string: name of data validation input file] [string: name of data validation output file] [string: name of SMART output file]\n";
 
@@ -138,7 +139,7 @@ int main(int argc, char *argv[]) {
         printf("Creating 1GB buffer...\n");
     
     void *buf;
-    if (posix_memalign(&buf, MB, GB) != 0) {
+    if (posix_memalign(&buf, MAX_IO_SIZE, GB) != 0) {
         printf("Failed to allocate aligned buffer.\n");
         exit(1);
     }
@@ -178,7 +179,7 @@ int main(int argc, char *argv[]) {
                 printf("Read %d\n", j + 1);
             ssize_t total_read = 0;
             while (total_read < GB) {
-                ssize_t num_read = pread(drive_fd, (char *)buf + total_read, MB, total_read);
+                ssize_t num_read = pread(drive_fd, (char *)buf + total_read, MAX_IO_SIZE, total_read);
                 if (num_read < 0) {
                     printf("Read error, aborting.\n");
                     close(drive_fd);
