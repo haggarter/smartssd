@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) {
     printf("FINISHED READ CYCLES, VALIDATING DATA\n");
 
     start = time(NULL);
-    char *temp = "tmp_data";
+    char *temp = "/dev/shm/tmp_data";
     int temp_fd = open(temp, O_WRONLY | O_CREAT, 0644);
 
     int w_total = 0;
@@ -215,7 +215,7 @@ int main(int argc, char *argv[]) {
     system(cmp_cmd);
 
     close(temp_fd);
-    system("rm tmp_data");
+    system("rm /dev/shm/tmp_data");
     end = time(NULL);
 
     elapsed_minutes = (float)(end - start) / 60.0;
